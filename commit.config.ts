@@ -1,5 +1,6 @@
-/** @type {import("cz-git").UserConfig} */
-const config = {
+import type { UserConfig } from "cz-git";
+
+const config: UserConfig = {
   types: [
     { value: 'feat', name: 'feat:     ✨  Nova feature' },
     { value: 'fix', name: 'fix:      🐛  Correção de bug' },

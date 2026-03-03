@@ -1,7 +1,7 @@
 /** @type {import("jest").Config} */
 module.exports = {
   testEnvironment: 'node',
-  roots: ['<rootDir>/__tests__'],
+  roots: ['<rootDir>/src/__tests__'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
