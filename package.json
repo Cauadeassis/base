@@ -19,6 +19,7 @@
     "migrate:up": "node-pg-migrate -m src/infra/migrations up"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "dotenv-expand": "^12.0.3",
     "next": "16.1.6",
@@ -31,6 +32,7 @@
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^6.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.18.0",

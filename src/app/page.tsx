@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from "./styles.module.css";
 import EmailField from "../components/emailField";
 import PasswordField from "../components/passwordField";
+import { handleCreateAccount } from "./services/authentication"
 
 type Step =
   | "login"
@@ -14,8 +15,9 @@ type Step =
 
 export default function Login() {
   const [step, setStep] = useState<Step>("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className={styles.body}>
@@ -39,7 +41,13 @@ export default function Login() {
                   Esqueceu a senha?
                 </button>
 
-                <button type="submit" className={styles.mainButton}>
+                <button
+                  type="button"
+                  className={styles.mainButton}
+                  onClick={async () => {
+                    const error = await handleCreateAccount({ email, password });
+                    if (error) setError(error);
+                  }}>
                   Entrar
                 </button>
               </>
@@ -112,6 +120,6 @@ export default function Login() {
           </form>
         </main>
       </div>
-    </div>
+    </div >
   );
 }
