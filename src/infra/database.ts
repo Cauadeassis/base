@@ -12,5 +12,5 @@ const query = async (queryObject: QueryConfig) => {
   const result = await client.query(queryObject);
   await client.end();
   return result;
-}
+};
 export default { query };

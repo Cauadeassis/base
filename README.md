@@ -37,3 +37,26 @@ Confiigurated Jest;
 Configurated cz-git;
 Configurated commitlint;
 Configurated CI with Github Actions;
+
+## PARTE ESSENCIAL
+
+Para rodar o sistema de usuário e senha, faça o seguinte:
+npm run docker:down
+Isso limpa o banco de dados, se ele já existir.
+npm run docker:up
+Isso sobe o banco de dados.
+Cria outro terminal e roda o comando:
+npm run migrate:up
+Isso cria a tabela `users` no banco de dados.
+npm run dev
+Do lado do botão terminal, tá escrito portas. Clica na porta 3000. Isso vai te redirecionar pro site.
+Coloca qualquer email que termina com @gmail.com
+A senha deve ter letra maiúscula, 8 dígitos e algum símbolo.
+Depois, pra consultar se o usuário foi cadastrado:
+Digita em um terminal:
+npm run docker:enter
+Isso entra no banco de dados.
+SELECT \* FROM users
+Vai selecionar tudo da tabela users.
+O usuário que você cadastrou deve aparecer lá.
+Só isso 😘

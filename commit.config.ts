@@ -1,4 +1,4 @@
-import type { UserConfig } from "cz-git";
+import type { UserConfig } from 'cz-git';
 
 const config: UserConfig = {
   types: [

@@ -1,33 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import styles from "./styles.module.css";
-import EmailField from "../components/emailField";
-import PasswordField from "../components/passwordField";
-import { handleCreateAccount } from "./services/authentication"
+import { useState } from 'react';
+import styles from './styles.module.css';
+import EmailField from '../components/emailField';
+import PasswordField from '../components/passwordField';
+import { handleCreateAccount } from './services/authentication';
 
 type Step =
-  | "login"
-  | "forgotPassword"
-  | "verifyingCode"
-  | "newPassword"
-  | "success";
+  | 'login'
+  | 'forgotPassword'
+  | 'verifyingCode'
+  | 'newPassword'
+  | 'success';
 
 export default function Login() {
-  const [step, setStep] = useState<Step>("login");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [step, setStep] = useState<Step>('login');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   return (
     <div className={styles.body}>
       <div className={styles.siteContent}>
-        <header>
-        </header>
+        <header></header>
 
         <main>
           <form>
-            {step === "login" && (
+            {step === 'login' && (
               <>
                 <EmailField value={email} onChange={setEmail} />
 
@@ -36,7 +35,7 @@ export default function Login() {
                 <button
                   type="button"
                   className={styles.forgotPassword}
-                  onClick={() => setStep("forgotPassword")}
+                  onClick={() => setStep('forgotPassword')}
                 >
                   Esqueceu a senha?
                 </button>
@@ -45,21 +44,25 @@ export default function Login() {
                   type="button"
                   className={styles.mainButton}
                   onClick={async () => {
-                    const error = await handleCreateAccount({ email, password });
+                    const error = await handleCreateAccount({
+                      email,
+                      password,
+                    });
                     if (error) setError(error);
-                  }}>
+                  }}
+                >
                   Entrar
                 </button>
               </>
             )}
 
-            {step === "forgotPassword" && (
+            {step === 'forgotPassword' && (
               <>
                 <EmailField value={email} onChange={setEmail} />
 
                 <button
                   type="button"
-                  onClick={() => setStep("verifyingCode")}
+                  onClick={() => setStep('verifyingCode')}
                   className={styles.mainButton}
                 >
                   Enviar código
@@ -67,7 +70,7 @@ export default function Login() {
               </>
             )}
 
-            {step === "verifyingCode" && (
+            {step === 'verifyingCode' && (
               <>
                 <label>
                   Código de verificação
@@ -82,7 +85,7 @@ export default function Login() {
 
                 <button
                   type="button"
-                  onClick={() => setStep("newPassword")}
+                  onClick={() => setStep('newPassword')}
                   className={styles.mainButton}
                 >
                   Verificar código
@@ -90,13 +93,13 @@ export default function Login() {
               </>
             )}
 
-            {step === "newPassword" && (
+            {step === 'newPassword' && (
               <>
                 <PasswordField value={password} onChange={setPassword} />
 
                 <button
                   type="button"
-                  onClick={() => setStep("success")}
+                  onClick={() => setStep('success')}
                   className={styles.mainButton}
                 >
                   Criar nova senha
@@ -104,13 +107,13 @@ export default function Login() {
               </>
             )}
 
-            {step === "success" && (
+            {step === 'success' && (
               <>
                 <p>Senha redefinida com sucesso 🎉</p>
 
                 <button
                   type="button"
-                  onClick={() => setStep("login")}
+                  onClick={() => setStep('login')}
                   className={styles.mainButton}
                 >
                   Voltar para login
@@ -120,6 +123,6 @@ export default function Login() {
           </form>
         </main>
       </div>
-    </div >
+    </div>
   );
 }
