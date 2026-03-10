@@ -1,55 +1,49 @@
-interface HandleCreateAccountProps {
+const errorMessages = {
+  invalidPassword:
+    "A senha deve ter pelo menos 8 dígitos, letra maiúscula e um símbolo",
+  invalidEmail: "O email deve terminar com @gmail.com",
+  emailAlreadyExists: "Email já cadastrado",
+  internalError: "Erro interno",
+} as const;
+
+type ErrorMessage = (typeof errorMessages)[keyof typeof errorMessages];
+
+interface CreateAccountProps {
   email: string;
   password: string;
 }
 
-function validatePassword(password: string): string | null {
-  const checks = [
-    {
-      isValid: password.length >= 8,
-      errorMessage: 'A senha deve ter pelo menos 8 caracteres',
-    },
-    {
-      isValid: /[A-Z]/.test(password),
-      errorMessage: 'A senha deve ter pelo menos uma letra maiúscula',
-    },
-    {
-      isValid: /[!@#$%^&*]/.test(password),
-      errorMessage: 'A senha deve ter pelo menos um símbolo (!@#$%^&*)',
-    },
-  ];
-  const failedCheck = checks.find((check) => !check.isValid);
-  return failedCheck?.errorMessage ?? null;
+export function passwordIsInvalid(password: string): boolean {
+  const hasMinLength = password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasSymbol = /[!@#$%^&*]/.test(password);
+
+  return !(hasMinLength && hasUpperCase && hasSymbol);
 }
 
-function validateEmail(email: string): string | null {
-  const isValid = email.endsWith('@gmail.com');
-  return isValid ? null : 'O email deve terminar com @gmail.com';
+export function emailIsInvalid(email: string): boolean {
+  return !email.endsWith("@gmail.com");
 }
 
-export async function handleCreateAccount({
+export async function createAccount({
   email,
   password,
-}: HandleCreateAccountProps) {
-  console.log(email);
-  console.log(password);
-  const emailError = validateEmail(email);
-  const passwordError = validatePassword(password);
+}: CreateAccountProps): Promise<ErrorMessage | null> {
+  if (passwordIsInvalid(password)) return errorMessages.invalidPassword;
 
-  if (emailError) return emailError;
-  if (passwordError) return passwordError;
+  if (emailIsInvalid(email)) return errorMessages.invalidEmail;
 
-  const response = await fetch('../api/create-account', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch("http://localhost:3000/api/create-account", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  console.log(response.status, response.statusText);
-  const data = await response.json();
 
   if (!response.ok) {
-    return data.error;
+    return response.status === 409
+      ? errorMessages.emailAlreadyExists
+      : errorMessages.internalError;
   }
-  console.log(data);
+
   return null;
 }

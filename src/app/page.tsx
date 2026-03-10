@@ -1,23 +1,37 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styles from './styles.module.css';
-import EmailField from '../components/emailField';
-import PasswordField from '../components/passwordField';
-import { handleCreateAccount } from './services/authentication';
+import { useState } from "react";
+import styles from "./styles.module.css";
+import EmailField from "./components/emailField";
+import PasswordField from "./components/passwordField";
+import StepLink from "./components/stepLink";
+import { createAccount } from "./services/authentication";
+import { sendEmail } from "./services/email";
 
 type Step =
-  | 'login'
-  | 'forgotPassword'
-  | 'verifyingCode'
-  | 'newPassword'
-  | 'success';
+  | "createAccount"
+  | "login"
+  | "forgotPassword"
+  | "verifyingCode"
+  | "newPassword"
+  | "success";
 
 export default function Login() {
-  const [step, setStep] = useState<Step>('login');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [step, setStep] = useState<Step>("createAccount");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+
+  async function handleCreateAccount() {
+    const error = await createAccount({ email, password });
+    if (error) setError(error);
+  }
+  async function handleSendCode() {
+    sendEmail({
+      email: "pageasy.muriae@gmail.com",
+      emailType: "forgot-password",
+    });
+  }
 
   return (
     <div className={styles.body}>
@@ -26,43 +40,50 @@ export default function Login() {
 
         <main>
           <form>
-            {step === 'login' && (
+            {step === "createAccount" && (
               <>
                 <EmailField value={email} onChange={setEmail} />
-
                 <PasswordField value={password} onChange={setPassword} />
-
-                <button
-                  type="button"
-                  className={styles.forgotPassword}
-                  onClick={() => setStep('forgotPassword')}
-                >
-                  Esqueceu a senha?
-                </button>
+                <StepLink onClick={() => setStep("login")}>
+                  Já tenho uma conta
+                </StepLink>
 
                 <button
                   type="button"
                   className={styles.mainButton}
-                  onClick={async () => {
-                    const error = await handleCreateAccount({
-                      email,
-                      password,
-                    });
-                    if (error) setError(error);
-                  }}
+                  onClick={handleCreateAccount}
                 >
+                  Criar
+                </button>
+              </>
+            )}
+            {step === "login" && (
+              <>
+                <EmailField value={email} onChange={setEmail} />
+
+                <PasswordField value={password} onChange={setPassword} />
+                <div className={styles.buttonFlexContainer}>
+                  <StepLink onClick={() => setStep("forgotPassword")}>
+                    Esqueci a senha
+                  </StepLink>
+                  <StepLink onClick={() => setStep("createAccount")}>
+                    Já tenho uma conta
+                  </StepLink>
+                </div>
+
+                <button type="button" className={styles.mainButton}>
                   Entrar
                 </button>
               </>
             )}
 
-            {step === 'forgotPassword' && (
+            {step === "forgotPassword" && (
               <>
                 <EmailField value={email} onChange={setEmail} />
 
                 <button
                   type="button"
-                  onClick={() => setStep('verifyingCode')}
+                  onClick={handleSendCode}
                   className={styles.mainButton}
                 >
                   Enviar código
@@ -70,7 +91,7 @@ export default function Login() {
               </>
             )}
 
-            {step === 'verifyingCode' && (
+            {step === "verifyingCode" && (
               <>
                 <label>
                   Código de verificação
@@ -85,7 +106,7 @@ export default function Login() {
 
                 <button
                   type="button"
-                  onClick={() => setStep('newPassword')}
+                  onClick={() => setStep("newPassword")}
                   className={styles.mainButton}
                 >
                   Verificar código
@@ -93,13 +114,13 @@ export default function Login() {
               </>
             )}
 
-            {step === 'newPassword' && (
+            {step === "newPassword" && (
               <>
                 <PasswordField value={password} onChange={setPassword} />
 
                 <button
                   type="button"
-                  onClick={() => setStep('success')}
+                  onClick={() => setStep("success")}
                   className={styles.mainButton}
                 >
                   Criar nova senha
@@ -107,13 +128,13 @@ export default function Login() {
               </>
             )}
 
-            {step === 'success' && (
+            {step === "success" && (
               <>
                 <p>Senha redefinida com sucesso 🎉</p>
 
                 <button
                   type="button"
-                  onClick={() => setStep('login')}
+                  onClick={() => setStep("login")}
                   className={styles.mainButton}
                 >
                   Voltar para login

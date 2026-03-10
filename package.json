@@ -2,6 +2,7 @@
   "name": "base",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,16 +20,19 @@
     "migrate:up": "node-pg-migrate -m src/infra/migrations up"
   },
   "dependencies": {
+    "@react-email/render": "^2.0.4",
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.3.1",
     "dotenv-expand": "^12.0.3",
     "next": "16.1.6",
     "node-pg-migrate": "^8.0.4",
     "pg": "^8.19.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.9.3"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-typescript": "^7.28.5",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
     "@tailwindcss/postcss": "^4",
@@ -38,7 +42,9 @@
     "@types/pg": "^8.18.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "babel-jest": "^30.2.0",
     "cz-git": "^1.12.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
